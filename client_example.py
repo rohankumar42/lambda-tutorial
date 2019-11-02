@@ -1,12 +1,15 @@
 from lambda_executor import Lambda
 
 
-def double(x):
-    return 2 * x
+def fib(n):
+    if n <= 1:
+        return 1
+    else:
+        return fib(n-1) + fib(n-2)
 
 
 if __name__ == "__main__":
     executor = Lambda()
-    res = [executor.run(double, i) for i in range(10)]
+    res = [executor.run(fib, n=i) for i in range(10)]
     print('Got results:', res)
     executor.stop()
