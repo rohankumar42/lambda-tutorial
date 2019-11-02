@@ -4,7 +4,7 @@ import queue
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format='%(message)s')
 
-QUEUE_TIMEOUT = 10 ** -3
+QUEUE_TIMEOUT = 10 ** -2
 
 
 class LambdaWorker(object):
@@ -12,7 +12,6 @@ class LambdaWorker(object):
 
     def __init__(self, job_queue, result_dict, worker_id):
         self.functions = {}
-
         self._job_queue = job_queue
         self._result_dict = result_dict
         self._id = worker_id

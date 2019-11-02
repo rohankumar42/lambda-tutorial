@@ -21,8 +21,9 @@ class Lambda(object):
         # Dictionary to receive results from workers
         self._result_dict = self._manager.dict()
 
-        # Count of number of jobs sent out
+        # Count of number of jobs sent out and track completed ones
         self._num_jobs = 0
+        self._jobs_completed = set()
 
         # Initialize workers
         for i in range(self._n):
@@ -47,6 +48,9 @@ class Lambda(object):
         new_job = LambdaJob(f, job_id, *args, **kwargs)
         self._job_queue.put(new_job)
 
+        return job_id
+
+    def get_result(self, job_id):
         # Wait until result has been put in the dict
         while job_id not in self._result_dict:
             continue
@@ -55,7 +59,11 @@ class Lambda(object):
         result = self._result_dict[job_id]
         logger.debug('[EXECUTOR] Got result {}'.format(job_id))
         del self._result_dict[job_id]
+        self._jobs_completed.add(job_id)
         return result
+
+    def is_done(self, job_id):
+        return job_id in self._jobs_completed or job_id in self._result_dict
 
     def stop(self):
         '''Stop all worker processes.'''

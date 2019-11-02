@@ -10,6 +10,8 @@ def fib(n):
 
 if __name__ == "__main__":
     executor = Lambda()
-    res = [executor.run(fib, n=i) for i in range(10)]
-    print('Got results:', res)
+    jobs = [executor.run(fib, n=i) for i in range(10)]
+    print('All tasks sent out!')
+    results = [executor.get_result(job) for job in jobs]
+    print('Got results:', results)
     executor.stop()
